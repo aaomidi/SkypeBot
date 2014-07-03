@@ -17,7 +17,7 @@ public class CommandsManager {
     private final SkypeBot instance;
     @Getter
     private static HashMap<String, SkypeCommand> commandMap = new HashMap<>();
-    private static long lastCalled = 1000;
+    private static HashMap<String, Long> spamFilter = new HashMap<>();
 
     public CommandsManager(SkypeBot instance) {
         this.instance = instance;
@@ -58,8 +58,11 @@ public class CommandsManager {
         String message = chatMessage.getContent();
         String[] messageArray = message.split(" ");
         String sentCommand = messageArray[0].replace("!", "").toLowerCase();
-        if (System.currentTimeMillis() - lastCalled < 1000) {
-            return;
+        String sender = chatMessage.getSender().getId();
+        if (spamFilter.containsKey(sender)) {
+            if (System.currentTimeMillis() - spamFilter.get(sender) < 5000) {
+                return;
+            }
         }
         if (!message.startsWith("!")) {
             return;
@@ -71,7 +74,7 @@ public class CommandsManager {
             } else {
                 chatMessage.getChat().send(command.getUsage());
             }
-            lastCalled = System.currentTimeMillis();
+            spamFilter.put(sender, System.currentTimeMillis());
         }
     }
 }
