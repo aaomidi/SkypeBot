@@ -3,6 +3,7 @@ package com.aaomidi.dev.skypebot.engine;
 import com.aaomidi.dev.skypebot.SkypeBot;
 import com.aaomidi.dev.skypebot.engine.commands.Help;
 import com.aaomidi.dev.skypebot.engine.commands.MCPing;
+import com.aaomidi.dev.skypebot.engine.commands.Source;
 import com.aaomidi.dev.skypebot.engine.modules.SkypeCommand;
 import com.skype.ChatMessage;
 import com.skype.ChatMessageListener;
@@ -30,10 +31,12 @@ public class CommandsManager {
 
     public void registerCommands() {
         this.onCommand();
-        MCPing mcPing = new MCPing("mcping", 1, "The command format is: !mcping [serverIP]");
         Help help = new Help("help", 0, "The command format is: !help");
-        this.registerCommand(mcPing);
+        MCPing mcPing = new MCPing("mcping", 1, "The command format is: !mcping [serverIP]");
+        Source source = new Source("source", 0, "The command format is: !source");
         this.registerCommand(help);
+        this.registerCommand(mcPing);
+        this.registerCommand(source);
     }
 
     public void onCommand() {
