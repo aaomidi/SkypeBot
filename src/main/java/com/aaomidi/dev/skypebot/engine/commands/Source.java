@@ -5,7 +5,7 @@ import com.skype.ChatMessage;
 import com.skype.SkypeException;
 
 /**
- * Created by Amir on 7/4/2014.
+ * @author aaomidi
  */
 public class Source extends SkypeCommand {
 

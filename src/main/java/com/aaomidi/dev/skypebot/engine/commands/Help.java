@@ -8,6 +8,9 @@ import com.skype.SkypeException;
 
 import java.util.HashMap;
 
+/**
+ * @author Amir
+ */
 public class Help extends SkypeCommand {
     public Help(String name, int requiredArgs, String usage) {
         super(name, requiredArgs, usage);

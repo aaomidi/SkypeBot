@@ -14,6 +14,9 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author aaomidi
+ */
 public class MCPing extends SkypeCommand {
 
 
