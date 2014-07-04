@@ -32,6 +32,14 @@ public class Chat extends SkypeCommand {
     public void execute(ChatMessage chatMessage, String[] args) throws SkypeException {
         try {
             String senderID = chatMessage.getSenderId();
+            if (args.length == 2) {
+                if (args[1].equalsIgnoreCase("reset")) {
+                    if (bots.containsKey(senderID)) {
+                        bots.remove(senderID);
+                        chatMessage.getChat().send("Reset your skype bot.");
+                    }
+                }
+            }
             ChatterBotSession session;
             if (bots.containsKey(senderID)) {
                 session = bots.get(senderID);
