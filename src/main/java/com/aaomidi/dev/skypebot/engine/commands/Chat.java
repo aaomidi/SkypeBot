@@ -36,7 +36,8 @@ public class Chat extends SkypeCommand {
                 if (args[1].equalsIgnoreCase("reset")) {
                     if (bots.containsKey(senderID)) {
                         bots.remove(senderID);
-                        chatMessage.getChat().send("Reset your skype bot.");
+                        chatMessage.getChat().send("We reset your skype bot.");
+                        return;
                     }
                 }
             }
