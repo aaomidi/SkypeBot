@@ -22,7 +22,7 @@
             <artifactId>skype-java-api</artifactId>
             <version>LATEST</version>
             <scope>system</scope>
-            <systemPath>${basedir}/src/lib/skype-java-api.jar</systemPath>
+            <systemPath>${basedir}/lib/skype-java-api.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -76,6 +76,12 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.4</version>
                 <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>com.aaomidi.dev.skypebot.SkypeBot</mainClass>
+                        </manifest>
+                    </archive>
                     <outputDirectory>jar/</outputDirectory>
                 </configuration>
             </plugin>
