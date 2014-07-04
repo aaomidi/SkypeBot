@@ -22,7 +22,7 @@
             <artifactId>skype-java-api</artifactId>
             <version>LATEST</version>
             <scope>system</scope>
-            <systemPath>${basedir}/src/skype-java-api.jar</systemPath>
+            <systemPath>${basedir}/src/lib/skype-java-api.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
