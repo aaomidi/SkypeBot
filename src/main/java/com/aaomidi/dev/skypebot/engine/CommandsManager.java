@@ -28,6 +28,10 @@ public class CommandsManager {
     }
 
     public static void runCommand(ChatMessage chatMessage) throws SkypeException {
+        if (chatMessage.getContent().equals("(┛ಠ_ಠ)┛彡┻━┻")) {
+            chatMessage.getChat().send("┬─┬ノ( º _ ºノ) Please respect tables!");
+            return;
+        }
         String message = chatMessage.getContent();
         String[] messageArray = message.split(" ");
         String sentCommand = messageArray[0].replace("!", "").toLowerCase();
@@ -78,6 +82,7 @@ public class CommandsManager {
                 @Override
                 public void chatMessageReceived(ChatMessage chatMessage) throws SkypeException {
                     CommandsManager.runCommand(chatMessage);
+
                 }
 
                 @Override
