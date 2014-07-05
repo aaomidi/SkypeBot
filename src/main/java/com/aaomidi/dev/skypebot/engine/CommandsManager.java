@@ -1,10 +1,7 @@
 package com.aaomidi.dev.skypebot.engine;
 
 import com.aaomidi.dev.skypebot.SkypeBot;
-import com.aaomidi.dev.skypebot.engine.commands.Chat;
-import com.aaomidi.dev.skypebot.engine.commands.Help;
-import com.aaomidi.dev.skypebot.engine.commands.MCPing;
-import com.aaomidi.dev.skypebot.engine.commands.Source;
+import com.aaomidi.dev.skypebot.engine.commands.*;
 import com.aaomidi.dev.skypebot.engine.modules.SkypeCommand;
 import com.skype.ChatMessage;
 import com.skype.ChatMessageListener;
@@ -13,17 +10,48 @@ import com.skype.SkypeException;
 import lombok.Getter;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class CommandsManager {
-    private final SkypeBot instance;
     @Getter
     private static HashMap<String, SkypeCommand> commandMap = new HashMap<>();
+    @Getter
+    private static Set<String> optOutSet = new HashSet<>();
     private static HashMap<String, Long> spamFilter = new HashMap<>();
+    private final SkypeBot instance;
 
     public CommandsManager(SkypeBot instance) {
         this.instance = instance;
         this.registerCommands();
+    }
+
+    public static void runCommand(ChatMessage chatMessage) throws SkypeException {
+        String message = chatMessage.getContent();
+        String[] messageArray = message.split(" ");
+        String sentCommand = messageArray[0].replace("!", "").toLowerCase();
+        String sender = chatMessage.getSender().getId();
+        if (optOutSet.contains(sender)) {
+            return;
+        }
+        if (spamFilter.containsKey(sender)) {
+            if (System.currentTimeMillis() - spamFilter.get(sender) < 5000) {
+                return;
+            }
+        }
+        if (!message.startsWith("!")) {
+            return;
+        }
+        if (commandMap.containsKey(sentCommand)) {
+            SkypeCommand command = commandMap.get(sentCommand);
+            if (messageArray.length >= command.getRequiredArgs() + 1) {
+                command.execute(chatMessage, messageArray);
+            } else {
+                chatMessage.getChat().send(command.getUsage());
+            }
+            spamFilter.put(sender, System.currentTimeMillis());
+        }
     }
 
     public void registerCommand(SkypeCommand command) {
@@ -35,10 +63,12 @@ public class CommandsManager {
         Chat chat = new Chat("chat", 1, "The command format is: !chat [message]");
         Help help = new Help("help", 0, "The command format is: !help");
         MCPing mcPing = new MCPing("mcping", 1, "The command format is: !mcping [serverIP]");
+        OptOut optOut = new OptOut("optout", 0, "The command format is: !optout");
         Source source = new Source("source", 0, "The command format is: !source");
         this.registerCommand(chat);
         this.registerCommand(help);
         this.registerCommand(mcPing);
+        this.registerCommand(optOut);
         this.registerCommand(source);
     }
 
@@ -57,30 +87,6 @@ public class CommandsManager {
             });
         } catch (Exception ex) {
             throw new RuntimeException(ex);
-        }
-    }
-
-    public static void runCommand(ChatMessage chatMessage) throws SkypeException {
-        String message = chatMessage.getContent();
-        String[] messageArray = message.split(" ");
-        String sentCommand = messageArray[0].replace("!", "").toLowerCase();
-        String sender = chatMessage.getSender().getId();
-        if (spamFilter.containsKey(sender)) {
-            if (System.currentTimeMillis() - spamFilter.get(sender) < 5000) {
-                return;
-            }
-        }
-        if (!message.startsWith("!")) {
-            return;
-        }
-        if (commandMap.containsKey(sentCommand)) {
-            SkypeCommand command = commandMap.get(sentCommand);
-            if (messageArray.length >= command.getRequiredArgs() + 1) {
-                command.execute(chatMessage, messageArray);
-            } else {
-                chatMessage.getChat().send(command.getUsage());
-            }
-            spamFilter.put(sender, System.currentTimeMillis());
         }
     }
 }
