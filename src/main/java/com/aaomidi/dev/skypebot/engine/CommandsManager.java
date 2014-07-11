@@ -69,11 +69,13 @@ public class CommandsManager {
         MCPing mcPing = new MCPing("mcping", 1, "The command format is: !mcping [serverIP]");
         OptOut optOut = new OptOut("optout", 0, "The command format is: !optout");
         Source source = new Source("source", 0, "The command format is: !source");
+        UUID uuid = new UUID("uuid", 1, "The command format is !uuid [name/uuid]");
         this.registerCommand(chat);
         this.registerCommand(help);
         this.registerCommand(mcPing);
         this.registerCommand(optOut);
         this.registerCommand(source);
+        this.registerCommand(uuid);
     }
 
     public void onCommand() {

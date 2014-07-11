@@ -34,5 +34,7 @@ $RECYCLE.BIN/
 !.gitattributes
 !.gitignore
 *~
+#Exclude
+!lib/*
 
 # Built using https://github.com/github/gitignore/
