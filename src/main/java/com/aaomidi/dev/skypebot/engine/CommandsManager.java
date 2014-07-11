@@ -84,7 +84,6 @@ public class CommandsManager {
                 @Override
                 public void chatMessageReceived(ChatMessage chatMessage) throws SkypeException {
                     CommandsManager.runCommand(chatMessage);
-
                 }
 
                 @Override
